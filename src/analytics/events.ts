@@ -1,4 +1,3 @@
-import { ATTRIBUTION_PLACEMENTS } from "@/config";
 import { isDifficulty, type Difficulty } from "@/engine/difficulty";
 import { hasOnlyKeys, isRecord } from "@/persistence/guards";
 import { isDayKey } from "@/time/day";
@@ -25,7 +24,6 @@ export type AnalyticsEvent =
   | { name: "share_clicked"; props: Day & { method: "native" | "copy" } }
   | { name: "share_completed"; props: Day }
   | { name: "share_link_copied"; props: Day }
-  | { name: "attribution_clicked"; props: { placement: "footer" | "result" | "about" | "share_page" } }
   | { name: "about_viewed"; props: Record<string, never> };
 
 export type EventName = AnalyticsEvent["name"];
@@ -59,7 +57,6 @@ const CLIENT_EVENTS: Record<ClientEvent["name"], { keys: readonly string[]; chec
   share_clicked: { keys: ["day", "method"], check: (p) => day(p) && ["native", "copy"].includes(p.method as string) },
   share_completed: { keys: ["day"], check: day },
   share_link_copied: { keys: ["day"], check: day },
-  attribution_clicked: { keys: ["placement"], check: (p) => (ATTRIBUTION_PLACEMENTS as readonly unknown[]).includes(p.placement) },
   about_viewed: { keys: [], check: () => true },
 };
 

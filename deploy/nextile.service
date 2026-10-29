@@ -1,5 +1,5 @@
 # /etc/systemd/system/nextile.service
-# Template for a plain Linux machine. [Confirm] what the Teeny Tiny Computer environment provides first.
+# Template for a plain Linux machine; see docs/DEPLOY.md.
 [Unit]
 Description=Nextile
 After=network.target

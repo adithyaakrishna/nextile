@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useRef } from "react";
 import { formatChallengeNumber } from "@/config";
 import type { Result } from "@/game/machine";
@@ -65,13 +64,6 @@ export function ResultsView({ result, isFresh, timing, store, isStorageAvailable
       <ShareButton text={shareText(result, summary.current, url)} day={result.day} />
 
       <NextCountdown nextAt={timing.nextAt} offsetMs={timing.offsetMs} nextNumber={result.number + 1} />
-
-      <p className="type-small text-on-mat-soft">
-        This game runs on a Teeny Tiny Computer.{" "}
-        <Link href="/about#teeny-tiny-computer" className="link">
-          What&apos;s that?
-        </Link>
-      </p>
     </div>
   );
 }

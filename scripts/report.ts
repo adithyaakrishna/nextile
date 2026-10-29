@@ -5,7 +5,7 @@ import Database from "better-sqlite3";
 import { LIMIT_MS } from "../src/scoring/score";
 import { GRACE_MS } from "../src/server/adjudicate";
 import { databasePath } from "../src/server/db";
-import { addDays, dayStartMs, isDayKey, toDayKey } from "../src/time/day";
+import { addDays, isDayKey, toDayKey } from "../src/time/day";
 
 const flag = (name: string) => process.argv.find((a) => a.startsWith(`--${name}=`))?.split("=")[1];
 const days = Number(flag("days") ?? 14);
@@ -43,21 +43,13 @@ function completion(day: string): { finished: number; started: number } {
 }
 
 const today = toFlag ?? toDayKey(Date.now());
-const columns = ["day", "visitors", "→start", "completion", "share", "next-day", "TTC visits"];
+const columns = ["day", "visitors", "→start", "completion", "share", "next-day"];
 console.log(`Nextile metrics, ${days} days to ${today} (${path})\n`);
 console.log(columns.map((c, i) => (i === 0 ? c.padEnd(10) : c.padStart(11))).join(" "));
 for (let i = days - 1; i >= 0; i--) {
   const day = addDays(today, -i);
   const landed = playersWith("landing_viewed", day);
   const viewed = playersWith("result_viewed", day);
-  const from = dayStartMs(day);
-  const clickers = new Set(
-    (
-      db
-        .prepare("SELECT DISTINCT player_id AS p FROM events WHERE name = 'attribution_clicked' AND at >= ? AND at < ? AND player_id IS NOT NULL")
-        .all(from, from + 86_400_000) as { p: string }[]
-    ).map((r) => r.p),
-  );
   const { finished, started } = completion(day);
   const cells = [
     String(landed.size),
@@ -65,10 +57,7 @@ for (let i = days - 1; i >= 0; i--) {
     pct(finished, started),
     pct(overlap(viewed, playersWith("share_clicked", day)), viewed.size),
     pct(overlap(landed, playersWith("landing_viewed", addDays(day, 1))), landed.size),
-    pct(overlap(viewed, clickers), viewed.size),
   ];
   console.log([day.padEnd(10), ...cells.map((c) => c.padStart(11))].join(" "));
 }
-console.log(
-  "\nShare and Teeny Tiny visits are shares of players who saw a result. Developer signups are measured on Teeny Tiny's side via utm_source=nextile.",
-);
+console.log("\nShare is the share of players who saw a result and pressed Share.");

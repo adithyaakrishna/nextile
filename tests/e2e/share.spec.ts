@@ -13,7 +13,7 @@ test("desktop share copies the exact spoiler-free text, and the link shows only 
   await expect(page.getByText("Copied to clipboard")).toBeVisible();
   const text = await page.evaluate(() => navigator.clipboard.readText());
   expect(text).toMatch(
-    /^Nextile #003\nSolved in \d+\.\d seconds\nScore: \d+\/100\n[■□]{10}\nStreak: 1 day\n\nPlay today's puzzle: http:\/\/localhost:3200\/s\/[A-Za-z0-9]{10}\nBuilt on Teeny Tiny Computer\.$/,
+    /^Nextile #003\nSolved in \d+\.\d seconds\nScore: \d+\/100\n[■□]{10}\nStreak: 1 day\n\nPlay today's puzzle: http:\/\/localhost:3200\/s\/[A-Za-z0-9]{10}$/,
   );
   expect(text.toLowerCase()).not.toMatch(/circle|square|triangle|diamond|blue|pink|yellow|solid|outline|striped/);
 

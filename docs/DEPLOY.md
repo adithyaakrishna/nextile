@@ -9,7 +9,7 @@ Nextile is one Next.js process plus one SQLite file. It has no external services
 
 **Requirements**
 
-- One instance only. The database is a local SQLite file and the rate limiter lives in memory, so don't run replicas or serverless functions. A platform like Vercel's serverless functions is not a fit; a VM, a container host with a volume, or a Teeny Tiny Computer is.
+- One instance only. The database is a local SQLite file and the rate limiter lives in memory, so don't run replicas or serverless functions. Serverless platforms such as Vercel's functions are not a fit; a VM or a container host with a volume is.
 - Persistent disk for the database file.
 - A domain pointing at the machine, and HTTPS. The player cookie is marked `Secure` whenever `PUBLIC_ORIGIN` starts with `https://`.
 - To build from source: Node 22 or newer, and pnpm 10 (`corepack enable` installs the version pinned in `package.json`).
@@ -20,7 +20,6 @@ Nextile is one Next.js process plus one SQLite file. It has no external services
 |---|---|---|---|
 | `PUBLIC_ORIGIN` | `https://nextile.example` | build and run | Share links, metadata and preview-image URLs. Static pages bake it in at build time |
 | `DATABASE_PATH` | `/srv/nextile/data/nextile.db` | run | Must be an **absolute** path on persistent disk. The standalone server runs from inside its release folder, so a relative path would be lost on the next deploy (the server logs a warning if it isn't absolute) |
-| `TTC_URL` | **[Confirm]** | build | Teeny Tiny Computer link. Until it is set, attribution links point at `/about` |
 | `PORT`, `HOSTNAME` | `3000`, `127.0.0.1` | run | Where the server listens. Use `0.0.0.0` inside a container |
 
 Never set `E2E`, `NX_CONTENT` or `NX_NOW` in production. They are test-only switches, and the server refuses to start with any of them unless `PUBLIC_ORIGIN` is a localhost address.
@@ -39,12 +38,11 @@ pnpm check            # lint, typecheck, unit tests, build, browser tests
 
 ## Option A: Docker
 
-Build the image. `PUBLIC_ORIGIN` and `TTC_URL` are build arguments because static pages bake them in:
+Build the image. `PUBLIC_ORIGIN` is a build argument because static pages bake it in:
 
 ```sh
 docker build -t nextile \
   --build-arg PUBLIC_ORIGIN=https://nextile.example \
-  --build-arg TTC_URL=https://teenytiny.example \
   .
 ```
 
@@ -71,7 +69,7 @@ On container platforms such as Railway or Fly.io, run a single instance, mount a
 
 ## Option B: a plain Linux machine with systemd and Caddy
 
-These steps assume Debian or Ubuntu. **[Confirm]** what a Teeny Tiny Computer provides (public address, TLS, persistent disk, process supervision) and skip whatever it already handles.
+These steps assume Debian or Ubuntu. If your host already provides HTTPS, process supervision or persistent disk, skip the matching step.
 
 ### 1. Prepare the machine
 
@@ -90,7 +88,6 @@ sudo -u nextile mkdir -p /srv/nextile/{data,backups,releases}
 ```ini
 PUBLIC_ORIGIN=https://nextile.example
 DATABASE_PATH=/srv/nextile/data/nextile.db
-TTC_URL=
 ```
 
 ```sh

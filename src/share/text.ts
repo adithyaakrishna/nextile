@@ -31,6 +31,6 @@ export function headline(r: Pick<LocalResult, "outcome" | "elapsedMs">): string 
 export function shareText(r: LocalResult, streak: number, url: string): string {
   const lines = [`Nextile ${formatChallengeNumber(r.number)}`, headline(r), `Score: ${r.score}/100`, timeBar(r)];
   if (streak > 0) lines.push(`Streak: ${streak} ${streak === 1 ? "day" : "days"}`);
-  lines.push("", `Play today's puzzle: ${url}`, "Built on Teeny Tiny Computer.");
+  lines.push("", `Play today's puzzle: ${url}`);
   return lines.join("\n");
 }

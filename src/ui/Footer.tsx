@@ -1,7 +1,4 @@
 import Link from "next/link";
-import type { AttributionPlacement } from "@/config";
-import { AttributionLink } from "./AttributionLink";
-import { teenyTinyHref } from "./teeny-tiny";
 
 const LINKS = [
   { href: "/how-to-play", label: "How to play" },
@@ -9,7 +6,7 @@ const LINKS = [
   { href: "/about", label: "About" },
 ] as const;
 
-export function Footer({ placement = "footer" }: { placement?: AttributionPlacement }) {
+export function Footer() {
   return (
     <footer className="mt-12 flex flex-col gap-3 border-t-[3px] border-current/15 pb-8 pt-5 text-on-mat">
       <nav aria-label="Footer">
@@ -23,11 +20,7 @@ export function Footer({ placement = "footer" }: { placement?: AttributionPlacem
           ))}
         </ul>
       </nav>
-      <p className="type-small text-on-mat-soft">
-        <AttributionLink href={teenyTinyHref(placement)} placement={placement}>
-          Built on Teeny Tiny Computer
-        </AttributionLink>
-      </p>
+      <p className="type-small text-on-mat-soft">A new puzzle every day at 00:00 UTC.</p>
     </footer>
   );
 }

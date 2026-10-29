@@ -13,16 +13,3 @@ export function formatChallengeNumber(n: number): string {
 }
 
 export const SITE_NAME = "Nextile";
-
-export const ATTRIBUTION_PLACEMENTS = ["footer", "result", "about", "share_page"] as const;
-export type AttributionPlacement = (typeof ATTRIBUTION_PLACEMENTS)[number];
-
-// Outbound links to Teeny Tiny Computer carry UTM tags so signups can be attributed
-export function attributionUrl(base: string, placement: AttributionPlacement): string {
-  const url = new URL(base);
-  url.searchParams.set("utm_source", "nextile");
-  url.searchParams.set("utm_medium", "game");
-  url.searchParams.set("utm_campaign", "nextile");
-  url.searchParams.set("utm_content", placement);
-  return url.toString();
-}

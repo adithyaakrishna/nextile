@@ -41,7 +41,7 @@ The plan's architecture is followed as written. These are the places it was adap
 | The archive shows this browser's results from the server (by cookie), not merged with local storage | Server-rendered and authoritative; only a browser that blocks cookies would differ |
 | Below 360 px, a six-slot rail wraps (as planned) and the answer cards shrink to 108 px; the header's challenge number is hidden | The plan's sizes don't fit 320×568 with two rail rows; this keeps the whole game in the first viewport, as the plan also requires |
 | Tiles are dealt with a hidden-then-snap animation instead of a fade | Design principle 5: things snap, nothing fades up |
-| Footer reads "Built on Teeny Tiny Computer" rather than "Built and hosted on"; the About page says the game was built by an AI agent and is designed to run on a single Teeny Tiny Computer, and drops "solved by a person before it's published" | Only verifiable claims: hosting is not confirmed, and puzzles have so far been reviewed by an AI agent only |
+| No Teeny Tiny Computer attribution (section 17 of the plan): no footer line, results line, share-text line, About section, outbound link, `attribution_clicked` event or `TTC_URL` | Removed on request after the build. The About page also drops "solved by a person before it's published", because puzzles have so far been reviewed by an AI agent only |
 | `postbuild` is part of `build` | pnpm does not reliably run `post` hooks |
 | Not built: optional "How everyone did today" (8.7) | Marked optional in the plan and first on the roadmap |
 
@@ -79,11 +79,9 @@ In a sandboxed shell that redirects Playwright's browser cache, prefix browser t
 **Needs a person or a fact this build couldn't know**
 
 - **Human review.** Every puzzle has `review: { by: "ai-agent" }`. An AI agent reviewed each sequence, choice set and explanation, and the solver proves uniqueness, but no person has solved them cold with a timer. `pnpm validate:puzzles` lists all 65. Replace each `review` with a person's initials once they have.
-- **[Confirm] Teeny Tiny Computer facts.** The URL (`TTC_URL` is unset, so attribution links go to `/about#teeny-tiny-computer`), whether the game is hosted there (the footer only says "Built on"), and the About page wording. All attribution copy is in `src/ui/Footer.tsx`, `app/about/page.tsx`, `src/ui/screens/ResultsView.tsx` and `src/share/text.ts`.
 - **[Confirm] launch date and domain.** `LAUNCH_DAY` in `src/config.ts` (2026-11-16) and `PUBLIC_ORIGIN`.
-- **Deployment.** Not done: no public address, TLS or target machine was available. The Docker image was built and run locally; the systemd and Caddy path in `docs/DEPLOY.md` has not been run on a real Linux server and should be adapted to what Teeny Tiny Computer provides.
+- **Deployment.** Not done: no public address, TLS or target machine was available. The Docker image was built and run locally; the systemd and Caddy path in `docs/DEPLOY.md` has not been run on a real Linux server.
 - **Analytics provider.** Events go only to the first-party `events` table. Nothing is forwarded to PostHog, Plausible or similar; the place to add an adapter is `send()` in `src/analytics/client.ts` (or a server-side forwarder in `src/server/events.ts`).
-- **Developer signups.** Measured on Teeny Tiny's side via `utm_source=nextile`; not visible here.
 
 **Measured and not met**
 

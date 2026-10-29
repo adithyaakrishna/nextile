@@ -31,7 +31,7 @@ export default async function SharePage({ params }: SharePageProps) {
   const isToday = todayNumber === result.number;
 
   return (
-    <PageShell placement="share_page">
+    <PageShell>
       <section className="panel flex flex-col items-start gap-5 p-6 sm:p-8">
         <h1 className="type-heading text-[26px] sm:text-[32px]">{sharedHeadline(result)}</h1>
         <p className="flex items-baseline gap-2">

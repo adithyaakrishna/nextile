@@ -7,10 +7,9 @@ RUN corepack enable
 COPY package.json pnpm-lock.yaml ./
 RUN pnpm install --frozen-lockfile
 COPY . .
-# Static pages bake these in at build time (share-image URLs and the attribution link), so pass them as build args
+# Static pages bake in the public origin at build time (for share-image URLs), so pass it as a build arg
 ARG PUBLIC_ORIGIN=http://localhost:3000
-ARG TTC_URL=
-ENV PUBLIC_ORIGIN=$PUBLIC_ORIGIN TTC_URL=$TTC_URL NEXT_TELEMETRY_DISABLED=1
+ENV PUBLIC_ORIGIN=$PUBLIC_ORIGIN NEXT_TELEMETRY_DISABLED=1
 RUN pnpm build
 
 FROM node:22-bookworm-slim AS run

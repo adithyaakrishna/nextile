@@ -7,7 +7,7 @@ REF="${1:-main}"
 ROOT=/srv/nextile
 RELEASE="$ROOT/releases/$(date +%Y%m%d%H%M%S)"
 
-# PUBLIC_ORIGIN and TTC_URL are baked into static pages, so the build needs the same env as the server
+# PUBLIC_ORIGIN is baked into static pages, so the build needs the same env as the server
 set -a
 source "$ROOT/env"
 set +a

@@ -8,7 +8,7 @@ const URL = "https://nextile.example/s/k3J9xQ2mPa";
 describe("share text", () => {
   it("matches the brief's example exactly", () => {
     expect(shareText(validResult({ number: 42 }), 4, URL)).toBe(
-      ["Nextile #042", "Solved in 18.4 seconds", "Score: 91/100", "■■■■□□□□□□", "Streak: 4 days", "", `Play today's puzzle: ${URL}`, "Built on Teeny Tiny Computer."].join("\n"),
+      ["Nextile #042", "Solved in 18.4 seconds", "Score: 91/100", "■■■■□□□□□□", "Streak: 4 days", "", `Play today's puzzle: ${URL}`].join("\n"),
     );
   });
 
