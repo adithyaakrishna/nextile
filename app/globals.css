@@ -1,0 +1,625 @@
+@import "tailwindcss";
+
+:root {
+  --mat: #cddfd2;
+  --mat-line: rgb(0 0 0 / 0.07);
+  --mat-line-strong: rgb(0 0 0 / 0.12);
+  --paper: #ffffff;
+  --ink: #000000;
+  --on-mat: #000000;
+  --on-mat-soft: #33463a;
+  --signal: #ff4f1f;
+  --on-signal: #000000;
+  --focus: #000000;
+
+  --piece-blue: #2349f2;
+  --piece-pink: #ff6eb0;
+  --piece-yellow: #ffd400;
+
+  --dur-press: 70ms;
+  --dur-snap: 140ms;
+  --dur-stamp: 180ms;
+  --ease-snap: cubic-bezier(0.2, 0.9, 0.3, 1);
+  --ease-stamp: cubic-bezier(0.3, 1.4, 0.5, 1);
+
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --mat: #183528;
+    --mat-line: rgb(255 255 255 / 0.07);
+    --mat-line-strong: rgb(255 255 255 / 0.12);
+    --on-mat: #f2f7f3;
+    --on-mat-soft: #a9c2b1;
+    --signal: #ff5a2b;
+    --focus: #f2f7f3;
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme="dark"],
+[data-mat="dark"] {
+  --mat: #183528;
+  --mat-line: rgb(255 255 255 / 0.07);
+  --mat-line-strong: rgb(255 255 255 / 0.12);
+  --on-mat: #f2f7f3;
+  --on-mat-soft: #a9c2b1;
+  --signal: #ff5a2b;
+  --focus: #f2f7f3;
+  color-scheme: dark;
+}
+
+[data-mat="light"] {
+  --mat: #cddfd2;
+  --mat-line: rgb(0 0 0 / 0.07);
+  --mat-line-strong: rgb(0 0 0 / 0.12);
+  --on-mat: #000000;
+  --on-mat-soft: #33463a;
+  --signal: #ff4f1f;
+  --focus: #000000;
+  color-scheme: light;
+}
+
+@theme inline {
+  --color-mat: var(--mat);
+  --color-paper: var(--paper);
+  --color-ink: var(--ink);
+  --color-on-mat: var(--on-mat);
+  --color-on-mat-soft: var(--on-mat-soft);
+  --color-signal: var(--signal);
+  --color-on-signal: var(--on-signal);
+  --font-sans: var(--font-archivo), "Arial", sans-serif;
+  --radius-tile: 6px;
+  --radius-button: 10px;
+  --radius-card: 12px;
+  --radius-panel: 18px;
+}
+
+@layer base {
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  color: var(--on-mat);
+  background-color: var(--mat);
+  font-family: var(--font-sans);
+  font-stretch: 100%;
+  /* Cutting-mat grid: fine lines every 24px, strong lines every 120px. Zero image assets. */
+  background-image:
+    linear-gradient(var(--mat-line-strong) 1px, transparent 1px),
+    linear-gradient(90deg, var(--mat-line-strong) 1px, transparent 1px),
+    linear-gradient(var(--mat-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--mat-line) 1px, transparent 1px);
+  background-size:
+    120px 120px,
+    120px 120px,
+    24px 24px,
+    24px 24px;
+  min-height: 100svh;
+}
+
+[data-mat] {
+  color: var(--on-mat);
+  background-color: var(--mat);
+}
+}
+
+@layer components {
+/* Typography: one family, used actively through its width and weight axes */
+.type-wordmark {
+  font-stretch: 125%;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+.type-display {
+  font-stretch: 125%;
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.01em;
+}
+.type-stamp {
+  font-stretch: 112%;
+  font-weight: 900;
+  line-height: 1;
+}
+.type-heading {
+  font-stretch: 100%;
+  font-weight: 800;
+  line-height: 1.15;
+}
+.type-label {
+  font-weight: 700;
+  line-height: 1.2;
+}
+.type-body {
+  font-weight: 400;
+  line-height: 1.5;
+  max-width: 60ch;
+}
+.type-small {
+  font-weight: 500;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+/* Paper surfaces are content: ink text on white in both themes */
+.paper {
+  background: var(--paper);
+  color: var(--ink);
+  border: 3px solid var(--ink);
+}
+.panel {
+  background: var(--paper);
+  color: var(--ink);
+  border: 3px solid var(--ink);
+  border-radius: var(--radius-panel);
+}
+
+/* Anything pressable. --lift is 4px for buttons, 6px for answer cards. */
+.press {
+  --lift: 4px;
+  border: 3px solid var(--ink);
+  box-shadow: var(--lift) var(--lift) 0 0 var(--ink);
+  transition:
+    transform var(--dur-press) linear,
+    box-shadow var(--dur-press) linear;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+.press:active,
+.press[data-state="pressed"],
+.press[data-state="locked"] {
+  transform: translate(var(--lift), var(--lift));
+  box-shadow: 0 0 0 0 var(--ink);
+}
+.press[data-state="done"] {
+  box-shadow: none;
+  cursor: default;
+}
+@media (hover: hover) and (pointer: fine) {
+  .press:not([data-state]):hover {
+    transform: translate(-2px, -2px);
+    box-shadow: calc(var(--lift) + 2px) calc(var(--lift) + 2px) 0 0 var(--ink);
+  }
+}
+.press:focus-visible,
+.focus-ring:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 4px;
+}
+:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 4px;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  min-width: 44px;
+  padding: 0 18px;
+  border-radius: var(--radius-button);
+  background: var(--paper);
+  color: var(--ink);
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+  user-select: none;
+}
+.btn-signal {
+  background: var(--signal);
+  color: var(--on-signal);
+}
+.btn-big {
+  min-height: 60px;
+  padding: 0 28px;
+  font-size: 20px;
+  font-weight: 800;
+}
+.btn-icon {
+  padding: 0;
+  width: 44px;
+}
+
+/* Puzzle pieces: colors are content, so forced-colors mode must leave them alone */
+.om-tile {
+  position: relative;
+  display: block;
+  background: var(--paper);
+  border: 3px solid var(--ink);
+  border-radius: var(--radius-tile);
+  forced-color-adjust: none;
+}
+.om-tile > svg,
+.om-card-art > svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.om-slot {
+  display: grid;
+  place-items: center;
+  border: 3px dashed currentColor;
+  border-radius: var(--radius-tile);
+  color: var(--on-mat);
+  font-stretch: 125%;
+  font-weight: 900;
+}
+.om-assist {
+  display: none;
+}
+[data-color-assist="on"] .om-assist {
+  display: inline;
+}
+
+/* Sequence rail sizing from the plan: tiles shrink with the viewport, within 44–96px */
+.rail {
+  --slots: 5;
+  --gap: 8px;
+  --tile: clamp(44px, calc((min(100vw, 760px) - 32px - (var(--slots) - 1) * var(--gap)) / var(--slots)), 96px);
+  display: flex;
+  justify-content: center;
+  gap: var(--gap);
+}
+.rail-compact {
+  --tile: clamp(40px, calc((min(100vw, 600px) - 64px - (var(--slots) - 1) * var(--gap)) / var(--slots)), 72px);
+}
+.rail-tile {
+  width: var(--tile);
+  height: var(--tile);
+}
+/* Below 360px a six-slot sequence wraps into two rows of three, and the answer cards shrink to keep everything in view */
+@media (max-width: 359px) {
+  .rail[data-slots="6"] {
+    flex-wrap: wrap;
+    max-width: calc(3 * 56px + 2 * var(--gap));
+    margin-inline: auto;
+    --tile: 56px;
+  }
+  [data-slots="6"] .answers {
+    --card: clamp(96px, min(34vw, 19svh), 108px);
+  }
+}
+
+/* Answer cards: square, sized so the whole game fits in the first viewport on short phones */
+.answers {
+  --card: clamp(96px, min(42vw, 22svh), 140px);
+  display: grid;
+  grid-template-columns: repeat(2, var(--card));
+  justify-content: center;
+  gap: 12px 16px;
+}
+@media (min-width: 640px) {
+  .answers {
+    grid-template-columns: repeat(4, var(--card));
+  }
+}
+.answers-compact {
+  --card: clamp(72px, 20vw, 104px);
+  grid-template-columns: repeat(4, var(--card));
+  gap: 10px;
+}
+.om-card {
+  --lift: 6px;
+  position: relative;
+  width: var(--card);
+  height: var(--card);
+  border-radius: var(--radius-card);
+  background: var(--paper);
+  color: var(--ink);
+  cursor: pointer;
+  forced-color-adjust: none;
+  padding: 0;
+  overflow: hidden;
+}
+.om-card[data-state="locked"],
+.om-card[data-end="answer"],
+.om-card[data-end="right"] {
+  border-width: 5px;
+}
+.om-card-key {
+  position: absolute;
+  top: 6px;
+  left: 8px;
+  font-weight: 800;
+  font-size: 14px;
+  line-height: 1;
+}
+.om-card-art {
+  position: absolute;
+  inset: 14%;
+}
+/* A tab sits over the top edge, so the art moves below it and never hides a top-row position */
+.om-card[data-tab] .om-card-art {
+  inset: 28px 16% 7% 16%;
+}
+.answers-compact .om-card[data-tab] .om-card-art {
+  inset: 21px 17% 5% 17%;
+}
+.om-card-tab {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  height: 22px;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  background: var(--paper);
+  color: var(--ink);
+  border-bottom: 3px solid var(--ink);
+}
+.answers-compact .om-card-tab {
+  height: 18px;
+  font-size: 10px;
+  gap: 2px;
+  white-space: nowrap;
+}
+.answers-compact .om-card-key {
+  top: 4px;
+  left: 6px;
+  font-size: 12px;
+}
+.om-card[data-end="right"] .om-card-tab {
+  background: var(--ink);
+  color: var(--paper);
+}
+.om-card[data-end="wrong"]::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(-45deg, rgb(0 0 0 / 0.15) 0 3px, transparent 3px 10px);
+  pointer-events: none;
+}
+
+/* The clock: the loudest object on the screen */
+.clock {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 52px;
+  padding: 4px 8px 4px 5px;
+  border-radius: var(--radius-button);
+  background: var(--paper);
+  color: var(--ink);
+  border: 3px solid var(--ink);
+  forced-color-adjust: none;
+}
+.digits {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+.digit {
+  display: grid;
+  place-items: center;
+  width: calc(0.86em + 10px);
+  height: calc(1em + 8px);
+  border: 3px solid var(--ink);
+  border-radius: var(--radius-tile);
+  background: var(--paper);
+  color: var(--ink);
+  font-stretch: 125%;
+  font-weight: 900;
+  line-height: 1;
+}
+.digit-sep {
+  font-stretch: 125%;
+  font-weight: 900;
+  line-height: 1;
+  width: 0.36em;
+  text-align: center;
+}
+.clock .digits {
+  font-size: 26px;
+}
+@media (min-width: 640px) {
+  .clock {
+    height: 62px;
+  }
+  .clock .digits {
+    font-size: 34px;
+  }
+}
+.fuse {
+  --elapsed: 0;
+  position: relative;
+  flex: 1;
+  height: 22px;
+  border: 3px solid var(--ink);
+  border-radius: 4px;
+  overflow: hidden;
+  background-color: var(--paper);
+  background-image: repeating-linear-gradient(
+    to right,
+    transparent 0,
+    transparent calc(100% / 60 - 1.5px),
+    rgb(0 0 0 / 0.28) calc(100% / 60 - 1.5px),
+    rgb(0 0 0 / 0.28) calc(100% / 60)
+  );
+}
+.fuse-burnt {
+  position: absolute;
+  inset: 0;
+  background: var(--ink);
+  transform-origin: left center;
+  transform: scaleX(var(--elapsed));
+}
+.clock[data-final="true"] {
+  background-image: repeating-linear-gradient(45deg, var(--signal) 0 10px, var(--ink) 10px 20px);
+  background-size: 28.28px 28.28px;
+  animation: hazard 900ms linear infinite;
+}
+.clock[data-final="true"] .digit {
+  background: var(--ink);
+  color: var(--paper);
+  border-color: var(--paper);
+}
+.clock[data-final="true"] .digit-sep {
+  color: var(--paper);
+  text-shadow: 0 0 2px var(--ink);
+}
+.clock[data-final="true"] .fuse {
+  background-color: var(--signal);
+}
+@keyframes hazard {
+  to {
+    background-position: 28.28px 0;
+  }
+}
+
+/* Countdown cells on the results screen reuse the clock's digit treatment */
+.countdown .digits {
+  font-size: 22px;
+}
+@media (min-width: 640px) {
+  .countdown .digits {
+    font-size: 28px;
+  }
+}
+
+/* Stamps land when the attempt ends */
+.stamp {
+  display: inline-block;
+  padding: 8px 14px;
+  border: 3px solid var(--ink);
+  border-radius: 8px;
+  transform: rotate(-3deg);
+  font-size: 25px;
+  background: var(--paper);
+  color: var(--ink);
+}
+.stamp[data-outcome="correct"] {
+  background: var(--ink);
+  color: var(--paper);
+}
+.stamp[data-outcome="timeout"] {
+  background-image: repeating-linear-gradient(-45deg, rgb(0 0 0 / 0.1) 0 4px, transparent 4px 10px);
+}
+.stamp[data-fresh="true"] {
+  animation: stamp var(--dur-stamp) var(--ease-stamp) both;
+}
+@keyframes stamp {
+  from {
+    transform: rotate(-3deg) scale(1.15);
+  }
+  to {
+    transform: rotate(-3deg) scale(1);
+  }
+}
+@media (min-width: 640px) {
+  .stamp {
+    font-size: 31px;
+  }
+}
+
+/* One orchestrated moment per phase: tiles are dealt in, the answer drops into the slot */
+.deal {
+  animation: deal var(--dur-snap) var(--ease-snap) both;
+  animation-delay: calc(var(--i, 0) * 40ms);
+}
+/* Dealt, not faded: each tile is hidden until its turn, then snaps into place */
+@keyframes deal {
+  from {
+    visibility: hidden;
+    transform: translateY(-8px);
+  }
+  to {
+    visibility: visible;
+    transform: none;
+  }
+}
+.drop {
+  animation: drop var(--dur-snap) var(--ease-snap) both;
+}
+@keyframes drop {
+  from {
+    transform: translateY(-14px) scale(1.06);
+  }
+  to {
+    transform: none;
+  }
+}
+
+/* Ten-cell time bar */
+.timebar {
+  display: flex;
+  gap: 4px;
+}
+.timebar-cell {
+  width: 18px;
+  height: 18px;
+  border: 3px solid var(--ink);
+  border-radius: 3px;
+  background: var(--paper);
+  display: grid;
+  place-items: center;
+  font-size: 12px;
+  font-weight: 900;
+  line-height: 1;
+}
+.timebar-cell[data-used="true"] {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.link {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+}
+.link:hover {
+  text-decoration-thickness: 3px;
+}
+}
+
+@media (forced-colors: active) {
+  .press,
+  .panel,
+  .paper,
+  .clock,
+  .stamp {
+    border-color: CanvasText;
+  }
+  .press {
+    box-shadow: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0ms !important;
+    animation-duration: 0ms !important;
+    animation-iteration-count: 1 !important;
+  }
+  .press:hover {
+    transform: none;
+  }
+  .clock[data-final="true"] {
+    animation: none;
+  }
+}

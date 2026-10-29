@@ -1,0 +1,5 @@
+# Caddyfile: automatic HTTPS. Replace the domain once it is confirmed.
+nextile.example {
+  encode zstd gzip
+  reverse_proxy 127.0.0.1:3000
+}

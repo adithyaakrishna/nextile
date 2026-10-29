@@ -1,0 +1,16 @@
+# /etc/systemd/system/nextile.service
+# Template for a plain Linux machine. [Confirm] what the Teeny Tiny Computer environment provides first.
+[Unit]
+Description=Nextile
+After=network.target
+
+[Service]
+User=nextile
+WorkingDirectory=/srv/nextile/current
+EnvironmentFile=/srv/nextile/env
+Environment=NODE_ENV=production PORT=3000 HOSTNAME=127.0.0.1
+ExecStart=/usr/bin/node .next/standalone/server.js
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

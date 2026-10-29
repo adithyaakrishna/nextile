@@ -1,0 +1,67 @@
+{
+  "name": "nextile",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "packageManager": "pnpm@10.24.0",
+  "scripts": {
+    "dev": "next dev",
+    "build": "pnpm validate:puzzles && next build && node scripts/copy-standalone.mjs",
+    "start": "node .next/standalone/server.js",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:e2e": "playwright test",
+    "validate:puzzles": "tsx --tsconfig tsconfig.scripts.json scripts/validate-puzzles.ts",
+    "puzzle:build": "tsx --tsconfig tsconfig.scripts.json scripts/puzzle-build.ts",
+    "puzzle:preview": "tsx --tsconfig tsconfig.scripts.json scripts/puzzle-preview.ts",
+    "schedule:extend": "tsx --tsconfig tsconfig.scripts.json scripts/schedule-extend.ts",
+    "lock:published": "tsx --tsconfig tsconfig.scripts.json scripts/lock-published.ts",
+    "report": "tsx --tsconfig tsconfig.scripts.json scripts/report.ts",
+    "check": "pnpm lint && pnpm typecheck && pnpm test && pnpm build && pnpm test:e2e",
+    "banner": "tsx --tsconfig tsconfig.scripts.json scripts/render-banner.ts"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "sharp",
+      "unrs-resolver"
+    ],
+    "ignoredBuiltDependencies": [
+      "better-sqlite3"
+    ],
+    "overrides": {
+      "playwright-core": "1.63.0",
+      "playwright": "1.63.0"
+    }
+  },
+  "dependencies": {
+    "better-sqlite3": "13.0.3",
+    "next": "16.4.3",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "server-only": "^0.0.1"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "4.14.0",
+    "@playwright/test": "1.63.0",
+    "@tailwindcss/postcss": "4.3.3",
+    "@testing-library/dom": "^10.4.2",
+    "@testing-library/react": "^16.3.3",
+    "@types/better-sqlite3": "^9.6.0",
+    "@types/node": "^22.20.5",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "eslint": "^9.39.5",
+    "eslint-config-next": "16.4.3",
+    "jsdom": "^29.1.1",
+    "tailwindcss": "4.3.3",
+    "tsx": "^4.23.15",
+    "typescript": "5.9.3",
+    "vitest": "5.0.5"
+  }
+}

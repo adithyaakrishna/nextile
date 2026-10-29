@@ -1,0 +1,16 @@
+node_modules/
+.next/
+out/
+coverage/
+tmp/
+data/
+*.db
+*.db-wal
+*.db-shm
+test-results/
+playwright-report/
+blob-report/
+next-env.d.ts
+*.tsbuildinfo
+.env*.local
+.DS_Store
