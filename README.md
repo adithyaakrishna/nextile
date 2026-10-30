@@ -31,12 +31,6 @@ pnpm install
 pnpm dev                 # http://localhost:3000
 ```
 
-Launch day is 16 November 2026, so before then the home page says the first puzzle isn't out yet. To play now, start the server clock on a launch-week date (local only):
-
-```sh
-PUBLIC_ORIGIN=http://localhost:3000 NX_NOW=2026-11-18T12:00:00Z pnpm dev
-```
-
 ## Commands
 
 | Task | Command |
