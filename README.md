@@ -8,7 +8,6 @@ One visual logic puzzle a day. At 00:00 UTC everyone gets the same short sequenc
 
 - **Fair by construction.** The tiles reach your browser only when you press Start, the server keeps the official time, and the answer never leaves the server until you've finished.
 - **Every puzzle is proven.** Each one is written from a rule, then checked by a solver that looks for every other reading a player might see, so exactly one answer fits. Difficulty is computed from the rule rather than chosen by hand.
-- **65 puzzles scheduled** from 16 November 2026 to 19 January 2027, in a weekly rhythm: easy on Monday and Tuesday, medium Wednesday to Friday and on Sunday, hard on Saturday.
 - **Plays well everywhere.** Keyboard play (Enter or Space to start, 1–4 to answer), plain-English tile descriptions for screen readers, color assist, reduced motion, and a light and a night "cutting mat" theme.
 - **Spoiler-free sharing**, with a per-result link preview that shows the score and never the tiles.
 - **One small machine.** Next.js and SQLite, with no external services.
